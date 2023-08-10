@@ -5,11 +5,14 @@
 .env
 ```sh
 appPort = 3333
-dbHost = 192.168.245.75
+dbHost = 0.0.0.0
 dbPort = 5454
 dbVolume = /db/postgres:/data
-dbUser = strawman
-dbPassword = paola?
+dbUser = pguser
+dbPassword = pgpassword
 dbDatabase = pumpkin_store
 dbSync = false
+pwSaltRounds = 10
+jwtSecret = 'ultimate secret'
+jwtExpiresIn = 182h
 ```
