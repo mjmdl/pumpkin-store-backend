@@ -10,7 +10,7 @@ export const typeormOptions: TypeOrmModuleOptions = {
 	username: env.dbUser,
 	password: env.dbPassword,
 	database: env.dbDatabase,
-	synchronize: env.dbSync == 'true',
+	synchronize: env.dbOrmSync == 'true',
 	autoLoadEntities: true,
 };
 
