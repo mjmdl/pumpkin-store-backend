@@ -1,4 +1,4 @@
-# Pumpkin Store
+# Pumpkin Store Backend
 
 ## Environment
 
@@ -13,7 +13,3 @@ dbPassword = paola?
 dbDatabase = pumpkin_store
 dbSync = false
 ```
-
-## License
-
-Nest is [MIT licensed](LICENSE).
