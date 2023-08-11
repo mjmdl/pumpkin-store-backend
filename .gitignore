@@ -1,4 +1,5 @@
 .env
+*.sql
 
 # compiled output
 /dist

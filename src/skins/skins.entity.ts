@@ -1,5 +1,5 @@
 import {Category} from 'src/categories/categories.entity';
-import {Closet} from 'src/closets/closets.entity';
+import {Shopcart} from 'src/shopcarts/shopcarts.entity';
 import {Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm';
 
 @Entity('skins')
@@ -16,19 +16,13 @@ export class Skin {
 	@Column({type: 'text'})
 	description: string;
 
+	@Column({type: 'money'})
+	price: number;
+
 	@ManyToOne(type => Category, category => category.skins)
 	@JoinColumn({name: 'category_id'})
 	category: Category;
 
-	@ManyToMany(type => Closet, closet => closet.skins)
-	closets: Closet[];
-
-	@CreateDateColumn()
-	created: Date;
-
-	@UpdateDateColumn()
-	updated: Date;
-
-	@DeleteDateColumn()
-	deleted: Date;
+	@ManyToMany(type => Shopcart, shopcart => shopcart.skins)
+	shopcarts: Shopcart[];
 }

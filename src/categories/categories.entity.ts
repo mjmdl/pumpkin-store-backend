@@ -1,4 +1,3 @@
-import {Closet} from 'src/closets/closets.entity';
 import {Skin} from 'src/skins/skins.entity';
 import {Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm';
 
@@ -15,16 +14,4 @@ export class Category {
 
 	@OneToMany(type => Skin, skin => skin.category)
 	skins: Skin[];
-
-	@OneToMany(type => Closet, closet => closet.category)
-	closets: Closet[];
-
-	@CreateDateColumn()
-	created: Date;
-
-	@UpdateDateColumn()
-	updated: Date;
-
-	@DeleteDateColumn()
-	deleted: Date;
 }

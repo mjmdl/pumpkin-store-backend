@@ -12,18 +12,6 @@ export class Claim {
 	@Column({length: Claim.nameMax})
 	name: string;
 
-	@Column({type: 'text'})
-	description: string;
-
 	@ManyToMany(type => User, user => user.claims)
 	users: User[];
-
-	@CreateDateColumn()
-	created: Date;
-
-	@UpdateDateColumn()
-	updated: Date;
-
-	@DeleteDateColumn()
-	deleted: Date;
 }

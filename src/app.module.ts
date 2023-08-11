@@ -8,7 +8,8 @@ import {ClaimsModule} from './claims/claims.module';
 import {ShopcartsModule} from './shopcarts/shopcarts.module';
 import {SkinsModule} from './skins/skins.module';
 import {CategoriesModule} from './categories/categories.module';
-import {ClosetsModule} from './closets/closets.module';
+import {AppController} from './app.controller';
+import {PaymentsModule} from './payments/payments.module';
 
 @Module({
 	imports: [
@@ -17,10 +18,11 @@ import {ClosetsModule} from './closets/closets.module';
 		AuthModule,
 		CategoriesModule,
 		ClaimsModule,
-		ClosetsModule,
+		PaymentsModule,
 		ShopcartsModule,
 		SkinsModule,
 		UsersModule,
 	],
+	controllers: [AppController],
 })
 export class AppModule {}
