@@ -1,6 +1,5 @@
-import {Claim} from 'src/claims/claims.entity';
-import {Shopcart} from 'src/shopcarts/shopcarts.entity';
-import {Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm';
+import {Permission} from 'src/permissions/permissions.entity';
+import {Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn, ViewEntity} from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -22,23 +21,11 @@ export class User {
 	@Column({length: User.passwordMax})
 	password: string;
 
-	@ManyToMany(type => Claim, claim => claim.users)
+	@ManyToMany(type => Permission, permission => permission.users)
 	@JoinTable({
-		name: 'users_have_claims',
+		name: 'users_permissions',
 		joinColumn: {name: 'user_id'},
-		inverseJoinColumn: {name: 'claim_id'}
+		inverseJoinColumn: {name: 'permission_id'}
 	})
-	claims: Claim[];
-
-	@OneToMany(type => Shopcart, shopcart => shopcart.buyer)
-	shopcarts: Shopcart[];
-
-	@CreateDateColumn()
-	created: Date;
-
-	@UpdateDateColumn()
-	updated: Date;
-
-	@DeleteDateColumn()
-	deleted: Date;
+	permissions: Permission[];
 }
