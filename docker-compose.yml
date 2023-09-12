@@ -1,0 +1,13 @@
+version: '3'
+services:
+  database:
+    image: postgres:latest
+    restart: always
+    ports:
+      - ${dbPort}:5432
+    volumes:
+      - ${dbVolume}
+    environment:
+      POSTGRES_USER: ${dbUser}
+      POSTGRES_PASSWORD: ${dbPassword}
+      POSTGRES_DATABASE: ${dbName}
