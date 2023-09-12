@@ -1,5 +1,5 @@
 import {FindOptionsWhere} from "typeorm";
-import User from "./user";
+import User from "./user-entity";
 import database from "../database";
 import * as bcrypt from 'bcrypt';
 import {UserPayload, UserValidate} from "./user-dto";

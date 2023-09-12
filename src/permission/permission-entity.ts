@@ -1,5 +1,14 @@
 import {Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn} from "typeorm";
-import User from "../user/user";
+import User from "../user/user-entity";
+
+export enum PermissionNames {
+	// NOTE: Manually insert the following permissions for the
+	// proper working of the API.
+
+	givePermission = 'GIVE_PERMISSION',
+	denyPermission = 'DENY_PERMISSION',
+	seeUserPermissions = 'SEE_USER_PERMISSIONS',
+}
 
 @Entity('permissions')
 export class Permission {

@@ -1,5 +1,5 @@
 import {DataSource} from "typeorm";
-import User from "./user/user";
+import User from "./user/user-entity";
 import {Permission} from "./permission/permission-entity";
 
 const env = process.env;

@@ -1,9 +1,10 @@
 import {Request, Response, Router} from "express";
 import {extractUserPayload, findUserBy} from "../user/user-logic";
 import {StatusCodes} from "http-status-codes";
-import User from '../user/user';
-import {findUserPermissions, userHasPermissions} from './permissions-logic';
-import {PermissionExpose} from './permission-dto';
+import User from '../user/user-entity';
+import {findUserPermissions, updateUserPermissions, userHasPermissions} from './permissions-logic';
+import {PermissionExpose, UserPermissionsUpdate} from './permission-dto';
+import {PermissionNames} from './permission-entity';
 
 const permissionRouter = Router();
 export default permissionRouter;
@@ -41,7 +42,7 @@ async function getUserPermissions(request: Request, response: Response) {
 				});
 		}
 
-		if (!await userHasPermissions(requestUser, 'SEE_USER_PERMISSIONS')) {
+		if (!await userHasPermissions(requestUser, PermissionNames.seeUserPermissions)) {
 			return response
 				.status(StatusCodes.UNAUTHORIZED)
 				.send({
@@ -63,7 +64,88 @@ async function getUserPermissions(request: Request, response: Response) {
 		});
 }
 
-permissionRouter.patch('/permissioes/usuario=:email', patchUserPermissions);
+permissionRouter.patch('/permissoes/usuario/email=:email', patchUserPermissions);
 async function patchUserPermissions(request: Request, response: Response) {
+	const userPermissionsUpdate = new UserPermissionsUpdate(
+		request.body.give ?? new Array<string>,
+		request.body.deny ?? new Array<string>
+	);
+	const validateErrors = await userPermissionsUpdate.validate();
+	if (validateErrors) {
+		return response
+			.status(StatusCodes.BAD_REQUEST)
+			.send({
+				message: 'Dados de permissões inválidos.',
+				errors: validateErrors.map(error => error.constraints)
+			});
+	}
 
+	if (userPermissionsUpdate.deny?.length === 0 && userPermissionsUpdate.give?.length === 0) {
+		return response
+			.status(StatusCodes.BAD_REQUEST)
+			.send({
+				message: 'Dados de permissões inválidos.'
+			});
+	}
+
+	const userPayload = extractUserPayload(request.headers.authorization ?? '');
+	if (!userPayload) {
+		return response
+			.status(StatusCodes.UNAUTHORIZED)
+			.send({
+				message: 'É necessário estar logado para ver as permissões.'
+			});
+	}
+
+	const requestUser = await findUserBy({id: userPayload.id});
+	if (!requestUser) {
+		return response
+			.status(StatusCodes.NOT_FOUND)
+			.send({
+				message: 'O usuário logado não foi encontrado.'
+			});
+	}
+
+	if (
+		userPermissionsUpdate.give.length !== 0 &&
+		!await userHasPermissions(requestUser, PermissionNames.givePermission, ...userPermissionsUpdate.give)
+	) {
+		return response
+			.status(StatusCodes.UNAUTHORIZED)
+			.send({
+				message: 'Não tem as permissões necessárias para dar permissões à alguém.'
+			});
+	}
+
+	if (
+		userPermissionsUpdate.deny.length !== 0 &&
+		!await userHasPermissions(requestUser, PermissionNames.denyPermission, ...userPermissionsUpdate.deny)
+	) {
+		return response
+			.status(StatusCodes.UNAUTHORIZED)
+			.send({
+				message: 'Não tem as permissões necessárias para tirar permissões de alguém.'
+			});
+	}
+
+	const targetUser = await findUserBy({email: request.params.email});
+	if (!targetUser) {
+		return response
+			.status(StatusCodes.NOT_FOUND)
+			.send({
+				message: 'O usuário alvo não foi encontrado.'
+			});
+	}
+
+	if (!await updateUserPermissions(targetUser, userPermissionsUpdate)) {
+		return response
+			.status(StatusCodes.INTERNAL_SERVER_ERROR)
+			.send({
+				message: 'Falha ao atualizar as permissões do usuário.'
+			});
+	}
+
+	return response
+		.status(StatusCodes.OK)
+		.send();
 }

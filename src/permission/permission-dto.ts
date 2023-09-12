@@ -1,17 +1,8 @@
 import {ViewColumn, ViewEntity} from "typeorm";
 import {Permission} from "./permission-entity";
-import User from "../user/user";
-import {IsOptional, IsString} from "class-validator";
-
-export class UserPermissionsUpdate {
-	@IsString({each: true})
-	@IsOptional()
-	give: string[];
-
-	@IsString({each: true})
-	@IsOptional()
-	deny: string[];
-}
+import User from "../user/user-entity";
+import {IsArray, IsOptional, IsString} from "class-validator";
+import {Validatable} from '../utils/validatable';
 
 @ViewEntity({
 	expression: dataSource => dataSource.createQueryBuilder()
@@ -34,5 +25,23 @@ export class PermissionExpose {
 	constructor(id: number, name: string) {
 		this.id = id;
 		this.name = name;
+	}
+}
+
+export class UserPermissionsUpdate extends Validatable {
+	@IsArray()
+	@IsString({each: true})
+	@IsOptional()
+	give?: string[];
+
+	@IsArray()
+	@IsString({each: true})
+	@IsOptional()
+	deny?: string[];
+
+	constructor(give: string[], deny: string[]) {
+		super();
+		this.give = give;
+		this.deny = deny;
 	}
 }

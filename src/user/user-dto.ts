@@ -1,25 +1,6 @@
-import {IsEmail, IsNotEmpty, IsString, Length, ValidationError, ValidatorOptions, validate} from "class-validator";
-import User from "./user";
-
-export class Validatable {
-	async validate(): Promise<null | ValidationError[]> {
-		const options: ValidatorOptions = {
-			forbidNonWhitelisted: true,
-			whitelist: true,
-		};
-
-		try {
-			const errors = await validate(this, options);
-			if (errors.length > 0) {
-				return errors;
-			}
-		} catch (error) {
-			return error;
-		}
-
-		return null;
-	}
-}
+import {IsEmail, IsNotEmpty, IsString, Length} from "class-validator";
+import User from "./user-entity";
+import {Validatable} from '../utils/validatable';
 
 export class UserCreate extends Validatable {
 	@Length(User.nameMin, User.nameMax)
@@ -37,7 +18,7 @@ export class UserCreate extends Validatable {
 	@IsNotEmpty()
 	password: string;
 
-	constructor (name: string, email: string, password: string) {
+	constructor(name: string, email: string, password: string) {
 		super();
 		this.name = name;
 		this.email = email;
@@ -56,7 +37,7 @@ export class UserValidate extends Validatable {
 	@IsNotEmpty()
 	password: string;
 
-	constructor (email: string, password: string) {
+	constructor(email: string, password: string) {
 		super();
 		this.email = email;
 		this.password = password;
@@ -64,14 +45,14 @@ export class UserValidate extends Validatable {
 }
 
 export class UserPayload {
-	constructor (
+	constructor(
 		public id: number,
 		public email: string,
 	) {}
 }
 
 export class UserProfile {
-	constructor (
+	constructor(
 		public name: string,
 		public email: string,
 	) {}

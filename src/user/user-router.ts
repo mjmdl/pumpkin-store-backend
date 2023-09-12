@@ -2,7 +2,7 @@ import {Request, Response, Router} from "express";
 import {UserCreate, UserProfile, UserValidate} from "./user-dto";
 import {StatusCodes} from "http-status-codes";
 import {extractUserPayload, findUserBy, generateUserToken, insertUser, validateUser} from "./user-logic";
-import User from "./user";
+import User from "./user-entity";
 
 const userRouter = Router();
 export default userRouter;

@@ -1,6 +1,18 @@
+import {FindOptionsWhere} from 'typeorm';
 import database from "../database";
-import User from "../user/user";
+import User from "../user/user-entity";
+import {UserPermissionsUpdate} from './permission-dto';
 import {Permission} from "./permission-entity";
+import {findUserBy} from '../user/user-logic';
+
+export async function findPermissionBy(where: FindOptionsWhere<Permission>): Promise<null | Permission> {
+    try {
+        const permission = await database.manager.findOneByOrFail(Permission, where);
+        return permission;
+    } catch (error) {
+        return null;
+    }
+}
 
 export async function findUserPermissions(user: User): Promise<null | Permission[]> {
     try {
@@ -29,4 +41,30 @@ export async function userHasPermissions(user: User, ...requiredPermissions: str
     );
 
     return permissionsLacking.length === 0;
+}
+
+export async function updateUserPermissions(user: User, permissionsUpdate: UserPermissionsUpdate): Promise<boolean> {
+    const targetUser = await findUserBy({id: user.id});
+    targetUser.permissions = await findUserPermissions(targetUser);
+
+    permissionsUpdate.give.forEach(async (givePermission) => {
+        const permission = await findPermissionBy({name: givePermission});
+        if (!permission) {
+            return;
+        }
+        targetUser.permissions.push(permission);
+    });
+
+    targetUser.permissions = targetUser.permissions.filter(
+        userPermission => !permissionsUpdate.deny.includes(userPermission.name)
+    );
+
+    console.log('user:', targetUser);
+
+    try {
+        const updatedUser = await database.manager.save(targetUser);
+        return !!updatedUser;
+    } catch (error) {
+        return false;
+    }
 }
