@@ -5,12 +5,9 @@ import {extractUserPayload, findUserBy, generateUserToken, insertUser, validateU
 import User from "./user";
 
 const userRouter = Router();
-userRouter
-	.post('/usuario', postUser)
-	.get('/usuario', getUserToken)
-	.get('/usuario/perfil', getUserProfile);
 export default userRouter;
 
+userRouter.post('/usuario', postUser);
 async function postUser(request: Request, response: Response) {
 	const {body} = request;
 	const userCreate = new UserCreate(body.name, body.email, body.password);
@@ -46,6 +43,7 @@ async function postUser(request: Request, response: Response) {
 		.send();
 }
 
+userRouter.get('/usuario', getUserToken);
 async function getUserToken(request: Request, response: Response) {
 	const {body} = request;
 	const userValidate = new UserValidate(body.email, body.password);
@@ -83,6 +81,7 @@ async function getUserToken(request: Request, response: Response) {
 		});
 }
 
+userRouter.get('/usuario/perfil', getUserProfile);
 async function getUserProfile(request: Request, response: Response) {
 	const userPayload = extractUserPayload(request.headers.authorization);
 	if (!userPayload) {

@@ -29,5 +29,10 @@ export class PermissionExpose {
 	name: string;
 
 	@ViewColumn()
-	userCount: number;
+	userCount?: number;
+
+	constructor(id: number, name: string) {
+		this.id = id;
+		this.name = name;
+	}
 }
