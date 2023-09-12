@@ -15,12 +15,16 @@ export class UserPermissionsUpdate {
 
 @ViewEntity({
 	expression: dataSource => dataSource.createQueryBuilder()
+		.addSelect('permission.id', 'id')
 		.addSelect('permission.name', 'name')
 		.addSelect('COUNT(user.id)', 'userCount')
 		.from(Permission, 'permission')
 		.leftJoin(User, 'user')
 })
 export class PermissionExpose {
+	@ViewColumn()
+	id: number;
+
 	@ViewColumn()
 	name: string;
 

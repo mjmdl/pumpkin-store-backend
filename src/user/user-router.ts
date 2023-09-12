@@ -6,12 +6,12 @@ import User from "./user";
 
 const userRouter = Router();
 userRouter
-	.post('/usuario', createUser)
+	.post('/usuario', postUser)
 	.get('/usuario', getUserToken)
 	.get('/usuario/perfil', getUserProfile);
 export default userRouter;
 
-async function createUser(request: Request, response: Response) {
+async function postUser(request: Request, response: Response) {
 	const {body} = request;
 	const userCreate = new UserCreate(body.name, body.email, body.password);
 	const userCreateErrors = await userCreate.validate();
