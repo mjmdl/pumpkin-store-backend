@@ -1,13 +1,14 @@
-version: '3'
+version: "3"
 services:
-  database:
-    image: postgres:latest
-    restart: always
-    ports:
-      - ${dbPort}:5432
-    volumes:
-      - ${dbVolume}
-    environment:
-      POSTGRES_USER: ${dbUser}
-      POSTGRES_PASSWORD: ${dbPassword}
-      POSTGRES_DATABASE: ${dbName}
+    db:
+        container_name: pumpkin-store-database
+        image: postgres:16
+        restart: no
+        volumes:
+            - ${DOCKER_POSTGRES_VOLUME}
+        ports:
+            - ${POSTGRES_PORT}:5432
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DATABASE}
