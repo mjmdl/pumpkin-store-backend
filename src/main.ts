@@ -1,16 +1,32 @@
-import envVar from "./utils/env";
-import dataSource from "data-source";
 import express from "express";
-import userRouter from "routers/user-router";
 
-(async () => {
-	await dataSource.initialize();
+import {getEnv} from "./utils/env";
+import {dataSource} from "./database";
+import {log} from "./utils/logger";
+import {usersRouter} from "./users/users-router";
+import {categoriesRouter} from "./categories/categories-router";
+import {productsRouter} from "./products/products-router";
+import {rolesRouter} from "./roles/roles-router";
+import {purchasesRouter} from "./purchases/purchases-router";
 
-	const app = express();
-	app.use(express.json());
-	app.use(userRouter);
+const ApiPort = Number(getEnv("API_PORT", "3000"));
 
-	const port = Number(envVar("EXPRESS_PORT"));
-	console.log(`Listening to port ${port}.`);
-	app.listen(port);
-})();
+async function main() {
+	dataSource
+		.initialize()
+		.catch(reason =>
+			log.error(`Failed to connect to the database because '${reason}'.`)
+		);
+
+	const api = express();
+	api.use(express.json());
+	api.use(usersRouter);
+	api.use(rolesRouter);
+	api.use(categoriesRouter);
+	api.use(productsRouter);
+	api.use(purchasesRouter);
+
+	log.info(`Listening to port ${ApiPort}.`);
+	api.listen(ApiPort);
+}
+main();

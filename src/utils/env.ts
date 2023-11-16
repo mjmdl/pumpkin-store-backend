@@ -1,12 +1,11 @@
 import "dotenv/config";
 
-export default function envVar(
-	varName: string,
-	optional = false
-): string | null {
-	if (!optional && !process.env[varName]) {
-		throw new Error(`Could not find environment variable '${varName}'.`);
+export function getEnv(varName: string, alt: string = null): string {
+	if (process.env[varName]) {
+		return process.env[varName];
+	} else if (alt) {
+		return alt;
 	} else {
-		return process.env[varName] ?? null;
+		throw new Error(`Environment variable ${varName} is not defined.`);
 	}
 }
