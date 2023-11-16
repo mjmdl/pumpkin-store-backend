@@ -4,7 +4,8 @@ import {HttpStatus} from "../utils/http-status";
 import {CreatePurchaseDto} from "./purchases-dtos";
 import {extractUserPayload} from "../users/users-services";
 import {validateDto} from "../utils/validate-dto";
-import {createPurchase} from "./purchases-services";
+import {createPurchase, findAllPurchases} from "./purchases-services";
+import {requireUserRole} from "../roles/roles-services";
 
 export const purchasesRouter = Router();
 
@@ -32,6 +33,18 @@ purchasesRouter.post(
 
 purchasesRouter.post("/purchases", async (req: Request, res: Response) => {
 	try {
+		const userPayload = await extractUserPayload(req.headers.authorization);
+		await requireUserRole(userPayload.email, "customer");
+
+		const pageSize = Number(req.query["page-size"] ?? 20);
+		const pageNumber = Number(req.query["page-number"] ?? 0);
+
+		const result = await findAllPurchases(
+			userPayload.email,
+			pageSize,
+			pageNumber
+		);
+		return res.status(HttpStatus.Ok).json(result);
 	} catch (error) {
 		return dispatchRouteError(res, error);
 	}

@@ -45,3 +45,27 @@ export async function createPurchase({
 	const result = await purchasesRepo.save(newPurchase);
 	return {id: result.id};
 }
+
+export async function findAllPurchases(
+	userEmail: string,
+	pageSize: number,
+	pageNumber: number
+) {
+	const result = await purchasesRepo.find({
+		skip: pageNumber * pageSize,
+		take: pageSize,
+		where: {user: {email: userEmail}},
+		select: {
+			id: true,
+			totalValue: true,
+			products: {
+				id: true,
+				name: true,
+				price: true,
+				category: {name: true},
+			},
+		},
+		relations: {products: true},
+	});
+	return result;
+}
