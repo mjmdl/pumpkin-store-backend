@@ -46,12 +46,12 @@ export async function createPurchase({
 	return {id: result.id};
 }
 
-export async function findAllPurchases(
+export async function findUserPurchases(
 	userEmail: string,
 	pageSize: number,
 	pageNumber: number
-) {
-	const result = await purchasesRepo.find({
+): Promise<Purchase[]> {
+	const purchases = await purchasesRepo.find({
 		skip: pageNumber * pageSize,
 		take: pageSize,
 		where: {user: {email: userEmail}},
@@ -67,5 +67,5 @@ export async function findAllPurchases(
 		},
 		relations: {products: true},
 	});
-	return result;
+	return purchases;
 }

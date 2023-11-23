@@ -68,8 +68,10 @@ export async function findAllProductsByCategory(
 			name: true,
 			price: true,
 			description: true,
+			category: {name: true},
 		},
-		where: {category: {name: ILike(categoryName)}}
+		relations: {category: true},
+		where: {category: {name: ILike(categoryName)}},
 	});
 	return products;
 }

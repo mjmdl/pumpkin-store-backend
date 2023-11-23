@@ -4,7 +4,7 @@ import {HttpStatus} from "../utils/http-status";
 import {CreatePurchaseDto} from "./purchases-dtos";
 import {extractUserPayload} from "../users/users-services";
 import {validateDto} from "../utils/validate-dto";
-import {createPurchase, findAllPurchases} from "./purchases-services";
+import {createPurchase, findUserPurchases} from "./purchases-services";
 import {requireUserRole} from "../roles/roles-services";
 
 export const purchasesRouter = Router();
@@ -39,7 +39,7 @@ purchasesRouter.post("/purchases", async (req: Request, res: Response) => {
 		const pageSize = Number(req.query["page-size"] ?? 20);
 		const pageNumber = Number(req.query["page-number"] ?? 0);
 
-		const result = await findAllPurchases(
+		const result = await findUserPurchases(
 			userPayload.email,
 			pageSize,
 			pageNumber

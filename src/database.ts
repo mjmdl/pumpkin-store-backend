@@ -1,3 +1,5 @@
+
+
 import {DataSource} from "typeorm";
 
 import {getEnv} from "./utils/env";
@@ -16,5 +18,15 @@ export const dataSource = new DataSource({
 	password: getEnv("PG_PASSWORD", "postgres"),
 	database: getEnv("PG_DB", "pumpkin_store"),
 	synchronize: getEnv("ORM_SYNC", "false") === "true",
-	entities: [Bundle, Category, Product, ProductImage, Purchase, Role, User, UserProfile],
+	entities: [
+		Bundle,
+		Category,
+		Product,
+		ProductImage,
+		Purchase,
+		Role,
+		User,
+		UserProfile
+	],
 });
+
