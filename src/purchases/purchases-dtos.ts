@@ -1,10 +1,4 @@
-import {
-	ArrayMinSize,
-	IsEmail,
-	IsNotEmpty,
-	IsString,
-	Length,
-} from "class-validator";
+import {ArrayMinSize, IsEmail, IsNotEmpty, IsString, Length} from "class-validator";
 import {User} from "../users/users-entities";
 import {Product} from "../products/products-entities";
 
@@ -20,7 +14,7 @@ export class CreatePurchaseDto {
 	@ArrayMinSize(1)
 	productNames: string[];
 
-	constructor(userEmail?: string, productNames?: string[]) {
+	constructor (userEmail?: string, productNames?: string[]) {
 		this.userEmail = userEmail;
 		this.productNames = productNames;
 	}

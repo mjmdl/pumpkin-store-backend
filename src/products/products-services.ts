@@ -54,3 +54,22 @@ export async function findAllProducts(
 	});
 	return products;
 }
+
+export async function findAllProductsByCategory(
+	categoryName: string,
+	pageNumber: number,
+	pageSize: number
+): Promise<Product[]> {
+	const products = await productRepo.find({
+		skip: pageNumber * pageSize,
+		take: pageSize,
+		select: {
+			id: true,
+			name: true,
+			price: true,
+			description: true,
+		},
+		where: {category: {name: ILike(categoryName)}}
+	});
+	return products;
+}

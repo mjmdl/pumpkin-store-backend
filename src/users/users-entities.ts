@@ -49,8 +49,8 @@ export class User {
 	name: "user_profile_view",
 	dependsOn: [User, Role, Purchase],
 	expression: `
-		SELECT u.id AS id, 
-			u.name AS name, 
+		SELECT u.id AS id,
+			u.name AS name,
 			u.email AS email,
 			ARRAY_AGG(r.name) AS role_names,
 			COUNT(p.id) AS purchases_count

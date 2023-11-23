@@ -3,7 +3,7 @@ import {HttpStatus} from "./http-status";
 import {log} from "./logger";
 
 export class RouteError {
-	constructor(
+	constructor (
 		public output: any,
 		public status = HttpStatus.InternalServerError
 	) {}
@@ -18,11 +18,7 @@ export function dispatchRouteError(res: Response, error: any) {
 	}
 }
 
-export async function dispatchRoute(
-	req: Request,
-	res: Response,
-	handler: Function
-) {
+export async function dispatchRoute(req: Request, res: Response, handler: Function) {
 	try {
 		await handler(req, res);
 	} catch (error) {

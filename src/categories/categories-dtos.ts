@@ -7,7 +7,7 @@ export class CreateCategoryDto {
 	@Length(Category.NameMin, Category.NameMax)
 	name: string;
 
-	constructor(name: string) {
+	constructor (name: string) {
 		this.name = name;
 	}
 }

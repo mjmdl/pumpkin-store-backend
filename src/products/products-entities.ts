@@ -1,11 +1,4 @@
-import {
-	Entity,
-	PrimaryGeneratedColumn,
-	Column,
-	ManyToOne,
-	JoinColumn,
-	ManyToMany,
-} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn, ManyToMany} from "typeorm";
 import {Bundle} from "../bundles/bundles-entities";
 import {Purchase} from "../purchases/purchases-entities";
 import {Category} from "../categories/categories-entities";
@@ -43,4 +36,20 @@ export class Product {
 
 	@ManyToMany(() => Purchase, purchase => purchase.products)
 	purchases: Purchase[];
+
+	@OneToMany(() => ProductImage, image => image.product)
+	images: ProductImage[];
+}
+
+@Entity("product_images")
+export class ProductImage {
+	@PrimaryGeneratedColumn()
+	id: number;
+
+	@Column({type: "bytea", nullable: false})
+	image: Buffer;
+
+	@ManyToOne(() => Product, product => product.images, {nullable: true})
+	@JoinColumn({name: "product_id"})
+	product?: Product;
 }

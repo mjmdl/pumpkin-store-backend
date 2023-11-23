@@ -1,11 +1,4 @@
-import {
-	IsNotEmpty,
-	IsNumber,
-	IsPositive,
-	IsString,
-	Length,
-	MaxLength,
-} from "class-validator";
+import {IsNotEmpty, IsNumber, IsPositive, IsString, Length, MaxLength} from "class-validator";
 import {Product} from "./products-entities";
 import {Category} from "../categories/categories-entities";
 
@@ -30,7 +23,7 @@ export class CreateProductDto {
 	@Length(Category.NameMin, Category.NameMax)
 	category: string;
 
-	constructor(
+	constructor (
 		name?: string,
 		description?: string,
 		price?: number,

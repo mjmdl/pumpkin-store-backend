@@ -5,7 +5,7 @@ import {requireUserRole} from "../roles/roles-services";
 import {extractUserPayload} from "../users/users-services";
 import {CreateProductDto} from "./products-dtos";
 import {validateDto} from "../utils/validate-dto";
-import {createProduct, findAllProducts} from "./products-services";
+import {createProduct, findAllProducts, findAllProductsByCategory} from "./products-services";
 
 export const productsRouter = Router();
 
@@ -35,8 +35,14 @@ productsRouter.get("/products", async (req: Request, res: Response) => {
 		const pageSize = Number(req.query["page-size"] ?? 20);
 		const pageNumber = Number(req.query["page-number"] ?? 0);
 
-		const result = await findAllProducts(pageNumber, pageSize);
-		return res.status(HttpStatus.Ok).json(result);
+		const categoryName = req.query["category"];
+		if (categoryName) {
+			const result = await findAllProductsByCategory(String(categoryName), pageNumber, pageSize);
+			return res.status(HttpStatus.Ok).json(result);
+		} else {
+			const result = await findAllProducts(pageNumber, pageSize);
+			return res.status(HttpStatus.Ok).json(result);
+		}
 	} catch (error) {
 		return dispatchRouteError(res, error);
 	}

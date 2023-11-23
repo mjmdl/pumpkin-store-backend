@@ -3,12 +3,7 @@ import {HttpStatus} from "../utils/http-status";
 import {dispatchRouteError} from "../utils/routing";
 import {validateDto} from "../utils/validate-dto";
 import {UserLoginDto, UserSignupDto} from "./users-dtos";
-import {
-	createUser,
-	validateUser,
-	extractUserPayload,
-	findUserProfile,
-} from "./users-services";
+import {createUser, validateUser, extractUserPayload, findUserProfile} from "./users-services";
 
 export const usersRouter = Router();
 

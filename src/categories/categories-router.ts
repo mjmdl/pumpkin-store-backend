@@ -2,7 +2,7 @@ import {Request, Response, Router} from "express";
 import {validateDto} from "../utils/validate-dto";
 import {CreateCategoryDto} from "./categories-dtos";
 import {HttpStatus} from "../utils/http-status";
-import {RouteError, dispatchRouteError} from "../utils/routing";
+import {dispatchRouteError} from "../utils/routing";
 import {extractUserPayload} from "../users/users-services";
 import {requireUserRole} from "../roles/roles-services";
 import {createCategory, findAllCategories} from "./categories-services";

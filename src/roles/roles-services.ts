@@ -67,3 +67,8 @@ export async function setUserRole(setUserRoleDto: SetUserRoleDto) {
 	targetUser.roles = newRoles;
 	const updatedUser = await userRepo.save(targetUser);
 }
+
+export async function findAllRoles() {
+	const roles = await roleRepo.find({select: {id: true, name: true}});
+	return {roles};
+}

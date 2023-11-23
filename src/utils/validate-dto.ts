@@ -7,10 +7,7 @@ const DefaultValidatorOptions: ValidatorOptions = {
 	forbidUnknownValues: true,
 };
 
-export async function validateDto(
-	dto: object,
-	options = DefaultValidatorOptions
-) {
+export async function validateDto(dto: object, options = DefaultValidatorOptions) {
 	const valErrors = await validate(dto, options);
 	if (valErrors.length) {
 		throw new RouteError({
